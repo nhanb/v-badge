@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<form action="/submit-fid" method="POST">
+  <h1>Enter your Fighter ID:</h1>
+  <p>
+    (remember to first register your FID on
+    <a href="https://v-league.pro/">V-League</a> if you haven't)
+  </p>
+  <div>
+    <input type="text" name="fid">
+    <button type="submit">Let's go <strike>Justin<strike></button>
+  </div>
+</form>
+{% endblock %}
