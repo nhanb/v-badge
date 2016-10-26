@@ -1,11 +1,17 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 
 VLEAGUE_URL = 'https://v-league.pro/player/%s/profile'
 CHAR_DIR = 'characters'
 BADGE_DIR = 'badges'
+FONT_PATH = 'fonts/LeagueGothic-Regular.otf'
+START_Y = 195
+PADDING_X = 7
+FID_FONT_SIZE = 40
+BODY_TOP = 21
+BODY_FONT_SIZE = 25
 
 
 if not os.path.isdir(BADGE_DIR):
@@ -17,15 +23,38 @@ def create_badge(profile):
     image = Image.open(infile)
 
     # Write text on image
-    # TODO
 
+    draw = ImageDraw.Draw(image)
+    fid_font = ImageFont.truetype(FONT_PATH, FID_FONT_SIZE)
+    body_font = ImageFont.truetype(FONT_PATH, BODY_FONT_SIZE)
+
+    draw.text((PADDING_X, START_Y), profile['fighter_id'], font=fid_font)
+
+    _draw_body(draw, body_font, 'Country: ' + profile['country'], 0)
+    _draw_body(draw, body_font, 'Rank: ' + profile['rank'], 1)
+    _draw_body(draw, body_font, 'League: ' + profile['league'], 2)
+    _draw_body(draw, body_font, 'League Points: ' + profile['lp'], 3)
+
+    wins, total = profile['ranked_counts']
+    _draw_body(draw,
+               body_font,
+               'Ranked Win Rate: %s%%' % str(wins / total * 100)[:4], 4)
+
+    # Save badge
     outfile = '%s/%s.png' % (BADGE_DIR, profile['fighter_id'].lower())
     image.save(outfile)
-    image.show()
+
+    return image
+
+
+def _draw_body(draw, font, text, order):
+    x = PADDING_X
+    y = START_Y + BODY_TOP + FID_FONT_SIZE + BODY_FONT_SIZE * order
+    draw.text((x, y), text, font=font)
 
 
 def _character_filename(character_name):
-    return character_name.lower().replace('.', '')
+    return character_name.lower().replace('.', '').replace('-', '')
 
 
 def get_profile(fighter_id):
