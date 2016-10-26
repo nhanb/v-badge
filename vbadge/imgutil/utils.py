@@ -4,10 +4,13 @@ from bs4 import BeautifulSoup
 from PIL import Image, ImageFont, ImageDraw
 
 VLEAGUE_URL = 'https://v-league.pro/player/%s/profile'
-CHAR_DIR = 'characters'
-BADGE_DIR = 'badges'
-FONT_PATH = 'fonts/LeagueGothic-Regular.otf'
-START_Y = 195
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+CHAR_DIR = CURRENT_DIR + '/characters'
+BADGE_DIR = CURRENT_DIR + '/badges'
+FONT_PATH = CURRENT_DIR + '/fonts/LeagueGothic-Regular.otf'
+
+PADDING_Y = 195
 PADDING_X = 7
 FID_FONT_SIZE = 40
 BODY_TOP = 21
@@ -28,7 +31,7 @@ def create_badge(profile):
     fid_font = ImageFont.truetype(FONT_PATH, FID_FONT_SIZE)
     body_font = ImageFont.truetype(FONT_PATH, BODY_FONT_SIZE)
 
-    draw.text((PADDING_X, START_Y), profile['fighter_id'], font=fid_font)
+    draw.text((PADDING_X, PADDING_Y), profile['fighter_id'], font=fid_font)
 
     _draw_body(draw, body_font, 'Country: ' + profile['country'], 0)
     _draw_body(draw, body_font, 'Rank: ' + profile['rank'], 1)
@@ -49,7 +52,7 @@ def create_badge(profile):
 
 def _draw_body(draw, font, text, order):
     x = PADDING_X
-    y = START_Y + BODY_TOP + FID_FONT_SIZE + BODY_FONT_SIZE * order
+    y = PADDING_Y + BODY_TOP + FID_FONT_SIZE + BODY_FONT_SIZE * order
     draw.text((x, y), text, font=font)
 
 
