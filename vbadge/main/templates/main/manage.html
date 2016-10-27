@@ -1,0 +1,19 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Manage{% endblock %}
+
+{% block body %}
+<img src="{{ badge_url }}">
+
+<ul>
+  <li>
+    FID: {{ fid }}
+  </li>
+  <li>
+    Token: {{ token }}
+  </li>
+  <li>
+    Embeddable link: <a href="{{ badge_url }}">{{ badge_url }}</a>
+  </li>
+</ul>
+{% endblock %}

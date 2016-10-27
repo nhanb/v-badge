@@ -2,6 +2,7 @@
 
 {% block body %}
 <form action="/submit" method="POST">
+  {% csrf_token %}
   <h1>Enter your Fighter ID:</h1>
   <p>
     (remember to first register your FID on

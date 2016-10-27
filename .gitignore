@@ -2,3 +2,4 @@ __pycache__
 *.pyc
 /vbadge/main/imgutil/badges
 /vbadge/db.sqlite3
+/vbadge/badges
