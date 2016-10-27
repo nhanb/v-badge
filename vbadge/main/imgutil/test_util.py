@@ -1,15 +1,16 @@
 import os
 import unittest
-import vbadge
+from . import util
 import requests_cache
 
 requests_cache.install_cache('requests_cache')
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class TestCreateBadge(unittest.TestCase):
 
     def test_read_badge(self):
-        image = vbadge.create_badge({
+        image = util.create_badge({
             'fighter_id': 'Rauden',
             'updated_at': '2016-10-25',
             'rank': '25459',
@@ -23,13 +24,14 @@ class TestCreateBadge(unittest.TestCase):
         })
 
         image.show()
-        self.assertTrue(os.path.isfile('badges/rauden.png'))
+        badge_path = os.path.join(CURRENT_DIR, 'badges', 'rauden.png')
+        self.assertTrue(os.path.isfile(badge_path))
 
 
 class TestGetProfile(unittest.TestCase):
 
     def test_get_rauden(self):
-        profile = vbadge.get_profile('rauden')
+        profile = util.get_profile('rauden')
         self.assertEqual(profile, {
             'fighter_id': 'Rauden',
             'updated_at': '2016-10-25',
