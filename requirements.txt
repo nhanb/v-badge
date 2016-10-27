@@ -3,6 +3,8 @@ lxml
 requests
 pillow
 flask
+celery
+sqlalchemy
 
 green
 nose

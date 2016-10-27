@@ -47,7 +47,7 @@ def create_badge(profile):
     outfile = '%s/%s.png' % (BADGE_DIR, profile['fighter_id'].lower())
     image.save(outfile)
 
-    return image
+    return outfile
 
 
 def _draw_body(draw, font, text, order):
