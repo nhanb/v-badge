@@ -1,0 +1,29 @@
+# Dev setup
+
+Target:
+
+- debian jessie
+- python 3.4
+- django 1.10
+- postgres 9.4
+
+For Ubuntu devs:
+
+```bash
+sudo apt-get install vagrant virtualbox ansible
+vagrant plugin install vagrant-vbguest
+# if `vagrant plugin install` fails then try installing vagrant from the .deb
+# provided on vagrant's website instead
+vagrant up --provision
+vagrant ssh
+
+# run the following inside the vagrant box's shell
+$ cd /vagrant
+$ . $HOME/scripts/setenv.sh
+$ python manage.py runserver 0.0.0.0:8000
+
+# server should now be live at whatever IP is configured in `Vagrantfile`.
+```
+
+For other distros: If you can't figure out what to do from the commands above,
+you don't deserve to be using anything other than Ubuntu.
