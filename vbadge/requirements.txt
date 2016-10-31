@@ -3,6 +3,7 @@ lxml
 requests
 pillow
 django
+psycopg2
 
 green
 nose

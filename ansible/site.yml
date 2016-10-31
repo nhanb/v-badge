@@ -1,0 +1,102 @@
+---
+- hosts: webservers
+  tasks:
+  - name: apt-get update
+    apt:
+      update_cache=yes
+      cache_valid_time=36000
+
+  - name: create app user
+    user:
+      name="{{ app_user }}"
+      home=/home/{{ app_user }}
+
+  - name: install apt packages
+    apt:
+      name="{{ item }}"
+      state=present
+    with_items:
+      # Python
+      - python3.4
+      - python3.4-dev
+      - python
+      - python-virtualenv
+      - python-pip
+      # Commodity packages
+      - vim
+      - git
+      - tree
+      # DB tools
+      - postgresql-9.4
+      # Stuff needed for building psycopg2:
+      - python-dev
+      - python-pip
+      - postgresql-server-dev-9.4 # server
+      - libpq-dev # client
+
+  - name: install psycopg2 # need this to use postgresql_db/user below
+    pip:
+      name=psycopg2
+      state=present
+
+  - name: create db
+    become: true
+    become_user: postgres
+    postgresql_db:
+      name="{{ db_name }}"
+
+  - name: create db user
+    become: true
+    become_user: postgres
+    postgresql_user:
+      db="{{ db_name }}"
+      name="{{ db_user }}"
+      password="{{ db_password }}"
+
+  - name: install virtualenvwrapper
+    pip:
+      name=virtualenvwrapper
+
+  - name: create virtualenv
+    command: virtualenv -p /usr/bin/python3.4 {{ virtualenv_dir }}
+    args:
+      creates: "{{ virtualenv_dir }}"
+
+  - name: upgrade pip to latest version
+    # Because older versions fail when installing Django 1.9
+    pip:
+      name=pip
+      state=latest
+      virtualenv="{{ virtualenv_dir }}"
+
+  - name: chown virtualenv dir to app user
+    file:
+      state=directory
+      path="{{ virtualenv_parent }}"
+      owner="{{ app_user }}"
+      group="{{ app_user }}"
+      recurse=yes
+
+  - name: install project python dependencies
+    pip:
+      requirements="{{ app_dir }}/requirements.txt"
+      virtualenv="{{ virtualenv_dir }}"
+
+  - name: generate django settings file
+    template:
+      src=settings.py.j2
+      dest="{{ app_dir }}/vbadge/settings.py"
+
+  - name: create scripts dir
+    file:
+      state=directory
+      path="/home/{{ app_user }}/scripts"
+      owner="{{ app_user }}"
+      group="{{ app_user }}"
+
+  - name: generate setenv script
+    template:
+      src=setenv.sh.j2
+      dest="/home/{{ app_user }}/scripts/setenv.sh"
+      owner="{{ app_user }}"
+      group="{{ app_user }}"

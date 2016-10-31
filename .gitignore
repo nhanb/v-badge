@@ -3,3 +3,7 @@ __pycache__
 /vbadge/main/imgutil/badges
 /vbadge/db.sqlite3
 /vbadge/badges
+/vbadge/vbadge/settings.py
+/logs
+/scripts
+/.vagrant

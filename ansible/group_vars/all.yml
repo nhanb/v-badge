@@ -1,0 +1,13 @@
+---
+app_user: vagrant
+app_dir: /vagrant
+log_dir: "/home/{{ app_user }}/logs"
+virtualenv_parent: "/home/{{ app_user }}/virtualenvs"
+virtualenv_dir: "{{ virtualenv_parent }}/vbadge"
+django:
+  secret_key: 'Jtw(FDFS^fMyepbi2Z@PcvbfF$22M32cWc74eo8m'
+  debug: yes
+db_host: localhost
+db_name: vbadge
+db_user: vbadge
+db_password: vbadge
