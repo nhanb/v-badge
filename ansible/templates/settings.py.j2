@@ -27,7 +27,9 @@ SECRET_KEY = '{{ django.secret_key }}'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = {{ 'True' if django.debug else 'False' }}
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'vbadge.local',
+]
 
 
 # Application definition

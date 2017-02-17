@@ -69,8 +69,11 @@ def get_profile(fighter_id):
     def split_counts(counts):
         return tuple(int(count) for count in counts.split('/'))
 
+    def shorten_date(d):
+        return d.split()[0]
+
     fields = [
-        ('updated_at', 'Profile Update'),
+        ('updated_at', 'Profile Update', shorten_date),
         ('rank', 'Rank', lambda x: x[:x.find('(')].strip()),
         ('lp', 'League Points'),
         ('league', 'League'),
@@ -85,10 +88,10 @@ def get_profile(fighter_id):
 
     result['fighter_id'] = fighter_id
     # Look for fighter ID in proper case
-    breadcrumbs = soup.find('ol', class_='breadcrumb').children
-    for b in breadcrumbs:
-        if (hasattr(b, 'text')):
-            text = b.text.strip()
+    profile_divs = soup.find('div', class_='profileBar').children
+    for div in profile_divs:
+        if (hasattr(div, 'text')):
+            text = div.text.strip()
             if text.lower() == fighter_id:
                 result['fighter_id'] = text
                 break
